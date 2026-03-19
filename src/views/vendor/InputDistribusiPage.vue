@@ -10,6 +10,13 @@ const jamBerangkat = ref('08:00')
 const schools = ref(['SDN 01 Pusat', 'SDN 05 Barat', 'SD Harapan'])
 
 function hitungSkor() {
+  localStorage.setItem('kawalmbg_draft_dist', JSON.stringify({
+    menuUtama: menuUtama.value,
+    jumlahPorsi: jumlahPorsi.value,
+    jamMasak: jamMasak.value,
+    jamBerangkat: jamBerangkat.value,
+    schools: schools.value
+  }))
   router.push('/vendor/input-distribusi/result')
 }
 </script>

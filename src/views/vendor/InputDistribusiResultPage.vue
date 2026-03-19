@@ -1,11 +1,46 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
+import { getData, saveData, type Distribution } from '@/services/localStorage'
+import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
 const toast = useToast()
+const authStore = useAuthStore()
+const draft = ref<any>(null)
+
+onMounted(() => {
+  const stored = localStorage.getItem('kawalmbg_draft_dist')
+  if (stored) draft.value = JSON.parse(stored)
+})
 
 function confirm() {
+  if (draft.value) {
+    const data = getData()
+    draft.value.schools.forEach((school: string) => {
+      const dist: Distribution = {
+        id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+        vendorId: authStore.user?.id || '2',
+        schoolName: school,
+        porsi: draft.value.jumlahPorsi,
+        status: 'medium',
+        statusText: 'Pending Review',
+        time: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+        riskScore: 78,
+        menuName: draft.value.menuUtama.split(',')[0] || 'Menu Baru',
+        menuUtama: draft.value.menuUtama,
+        suhu: 32,
+        durasi: 45,
+        levelRisiko: 'MEDIUM',
+        catatan: 'Data dikirim via aplikasi. Menunggu balasan & validasi sensor.'
+      }
+      data.distributions.unshift(dist)
+    })
+    saveData(data)
+    localStorage.removeItem('kawalmbg_draft_dist')
+  }
+
   toast.add({ severity: 'success', summary: 'Distribusi Dimulai', detail: 'Data berhasil diverifikasi dan direkam ke blockchain log', life: 4000 })
   router.push('/vendor/history')
 }
