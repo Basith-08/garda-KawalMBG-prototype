@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { getData, type Vendor } from '@/services/localStorage'
+import { getData, type Vendor } from '@/services/api'
 
 const data = getData()
 const vendors = ref<Vendor[]>(data.vendors)

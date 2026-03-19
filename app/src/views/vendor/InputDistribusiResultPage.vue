@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
-import { getData, saveData, type Distribution } from '@/services/localStorage'
+import { getData, saveData, type Distribution } from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()

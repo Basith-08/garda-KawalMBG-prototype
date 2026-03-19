@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { getData, saveData, type Document } from '@/services/localStorage'
+import { getData, saveData, type Document } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 
 const toast = useToast()

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import axios from 'axios'
 
 export interface User {
   id: string
@@ -14,29 +15,15 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => !!user.value)
 
-  function login(email: string, _password: string): boolean {
-    if (email.includes('regulator')) {
-      user.value = {
-        id: '1',
-        name: 'Moni Roy',
-        email,
-        role: 'regulator',
-        avatar: 'https://i.pravatar.cc/80?u=regulator',
-      }
+  async function login(email: string, _password: string): Promise<boolean> {
+    try {
+      const res = await axios.post('/api/auth/login', { email, password: _password })
+      user.value = res.data
       localStorage.setItem('kawalmbg_user', JSON.stringify(user.value))
       return true
-    } else if (email.includes('vendor')) {
-      user.value = {
-        id: '2',
-        name: 'Moni Roy',
-        email,
-        role: 'vendor',
-        avatar: 'https://i.pravatar.cc/80?u=vendor',
-      }
-      localStorage.setItem('kawalmbg_user', JSON.stringify(user.value))
-      return true
+    } catch (e) {
+      return false
     }
-    return false
   }
 
   function logout() {

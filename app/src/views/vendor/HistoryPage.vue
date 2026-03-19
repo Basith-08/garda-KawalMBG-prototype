@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { getData, type Distribution } from '@/services/localStorage'
+import { getData, type Distribution } from '@/services/api'
 
 const data = getData()
 const distributions = ref<Distribution[]>(data.distributions)

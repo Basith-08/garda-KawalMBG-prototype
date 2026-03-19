@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getData } from '@/services/localStorage'
+import { getData } from '@/services/api'
 
 const data = getData()
 const distributions = data.distributions

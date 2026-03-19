@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { getData, type Alert, type Distribution } from '@/services/localStorage'
+import { getData, type Alert, type Distribution } from '@/services/api'
 import * as XLSX from 'xlsx'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getData, type Alert } from '@/services/localStorage'
+import { getData, type Alert } from '@/services/api'
 import { ref } from 'vue'
 
 const data = getData()

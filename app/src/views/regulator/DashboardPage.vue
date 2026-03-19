@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { getData } from '@/services/localStorage'
+import { getData } from '@/services/api'
 
 const data = getData()
 const highRiskCount = computed(() => data.vendors.filter((v: any) => v.status === 'high-risk').length)

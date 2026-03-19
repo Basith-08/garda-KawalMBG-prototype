@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getData } from '@/services/localStorage'
+import { getData } from '@/services/api'
 
 const route = useRoute()
 const router = useRouter()

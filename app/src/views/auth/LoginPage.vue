@@ -17,7 +17,7 @@ const loginSchema = z.object({
   password: z.string().min(1, 'Password harus diisi'),
 })
 
-function handleLogin() {
+async function handleLogin() {
   error.value = ''
   const result = loginSchema.safeParse({ email: email.value, password: password.value })
   if (!result.success) {
@@ -25,7 +25,7 @@ function handleLogin() {
     return
   }
 
-  const success = authStore.login(email.value, password.value)
+  const success = await authStore.login(email.value, password.value)
   if (success) {
     if (authStore.user?.role === 'regulator') {
       router.push('/regulator/dashboard')

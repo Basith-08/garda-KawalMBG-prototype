@@ -1,0 +1,9 @@
+# Node & Vue (bisa dipertahankan di dalam app/.gitignore)
+app/node_modules/
+app/dist/
+
+# Backend Python
+backend/venv/
+backend/__pycache__/
+*.pyc
+.env
