@@ -1,0 +1,124 @@
+@import "tailwindcss";
+@import "primeicons/primeicons.css";
+
+/* ===== Design Tokens ===== */
+@theme {
+  --color-navy-900: #1e293b;
+  --color-navy-800: #2d3a4a;
+  --color-navy-700: #374151;
+  --color-navy-600: #4b5563;
+  --color-navy-500: #64748b;
+  --color-navy-400: #94a3b8;
+  --color-navy-300: #cbd5e1;
+  --color-navy-200: #e2e8f0;
+  --color-navy-100: #f1f5f9;
+  --color-navy-50: #f8fafc;
+
+  --color-brand-primary: #1e293b;
+  --color-brand-accent: #3b82f6;
+  --color-brand-accent-hover: #2563eb;
+  --color-brand-success: #10b981;
+  --color-brand-warning: #f59e0b;
+  --color-brand-danger: #ef4444;
+  --color-brand-info: #06b6d4;
+
+  --color-status-safe: #22c55e;
+  --color-status-medium: #eab308;
+  --color-status-high-risk: #ef4444;
+
+  --color-sidebar-bg: #2d3a4a;
+  --color-sidebar-active: #1e293b;
+  --color-sidebar-hover: #374151;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ===== Base Styles ===== */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-navy-50);
+    color: var(--color-navy-900);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html, body, #app {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+/* ===== PrimeVue Overrides ===== */
+.p-datatable .p-datatable-thead > tr > th {
+  background: transparent !important;
+  border-bottom: 2px solid var(--color-navy-200) !important;
+  font-weight: 600;
+  color: var(--color-navy-700);
+  padding: 0.75rem 1rem;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+  background: transparent;
+}
+
+.p-datatable .p-datatable-tbody > tr:nth-child(odd) {
+  background: var(--color-navy-50);
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.75rem 1rem;
+  border: none;
+}
+
+/* Gauge Chart */
+.gauge-container {
+  position: relative;
+  width: 280px;
+  height: 160px;
+}
+
+.gauge-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Donut Chart */
+.donut-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+
+.donut-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
