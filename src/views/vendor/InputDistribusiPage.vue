@@ -18,32 +18,32 @@ function hitungSkor() {
   <div class="animate-fade-in">
     <h1 class="text-2xl font-bold text-navy-900 mb-8">Input Distribusi Hari Ini</h1>
 
-    <div class="flex gap-8">
+    <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
       <!-- Form -->
-      <div class="flex-1 space-y-6">
-        <div class="flex items-center gap-8">
-          <label class="text-lg font-bold text-navy-900 w-48 shrink-0">Menu Utama:</label>
-          <input v-model="menuUtama" type="text" class="flex-1 px-4 py-3 border border-navy-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent" />
+      <div class="flex-1 space-y-4 md:space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
+          <label class="text-base md:text-lg font-bold text-navy-900 md:w-48 shrink-0">Menu Utama:</label>
+          <input v-model="menuUtama" type="text" class="w-full md:flex-1 px-4 py-3 border border-navy-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent" />
         </div>
-        <div class="flex items-center gap-8">
-          <label class="text-lg font-bold text-navy-900 w-48 shrink-0">Jumlah Porsi/<br/>Sekolah</label>
-          <input v-model="jumlahPorsi" type="number" class="w-28 px-4 py-3 border border-navy-200 rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-brand-accent" />
+        <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
+          <label class="text-base md:text-lg font-bold text-navy-900 md:w-48 shrink-0">Jumlah Porsi/<br class="hidden md:block"/>Sekolah</label>
+          <input v-model="jumlahPorsi" type="number" class="w-full md:w-28 px-4 py-3 border border-navy-200 rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-brand-accent" />
         </div>
-        <div class="flex items-center gap-8">
-          <label class="text-lg font-bold text-navy-900 w-48 shrink-0">Jam Selesai Masak:</label>
-          <select v-model="jamMasak" class="px-4 py-3 border border-navy-200 rounded-lg text-sm bg-white">
+        <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
+          <label class="text-base md:text-lg font-bold text-navy-900 md:w-48 shrink-0">Jam Selesai Masak:</label>
+          <select v-model="jamMasak" class="w-full md:w-auto px-4 py-3 border border-navy-200 rounded-lg text-sm bg-white">
             <option>05:00</option><option>06:00</option><option>07:00</option>
           </select>
         </div>
-        <div class="flex items-center gap-8">
-          <label class="text-lg font-bold text-navy-900 w-48 shrink-0">Jam Keberangkatan:</label>
-          <select v-model="jamBerangkat" class="px-4 py-3 border border-navy-200 rounded-lg text-sm bg-white">
+        <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
+          <label class="text-base md:text-lg font-bold text-navy-900 md:w-48 shrink-0">Jam Keberangkatan:</label>
+          <select v-model="jamBerangkat" class="w-full md:w-auto px-4 py-3 border border-navy-200 rounded-lg text-sm bg-white">
             <option>07:00</option><option>08:00</option><option>09:00</option>
           </select>
         </div>
-        <div class="flex items-start gap-8">
-          <label class="text-lg font-bold text-navy-900 w-48 shrink-0 pt-2">Sekolah Tujuan:</label>
-          <div>
+        <div class="flex flex-col md:flex-row md:items-start gap-2 md:gap-8">
+          <label class="text-base md:text-lg font-bold text-navy-900 md:w-48 shrink-0 pt-0 md:pt-2">Sekolah Tujuan:</label>
+          <div class="w-full">
             <div class="flex flex-wrap gap-3 mb-3">
               <span v-for="s in schools" :key="s" class="inline-flex items-center gap-2 px-5 py-2.5 bg-navy-500 text-white rounded-full text-sm font-medium">
                 <i class="pi pi-check-circle text-brand-success"></i> {{ s }}
@@ -55,13 +55,13 @@ function hitungSkor() {
           </div>
         </div>
 
-        <button @click="hitungSkor" class="mt-4 px-10 py-4 bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold rounded-xl transition-colors shadow-md text-lg">
+        <button @click="hitungSkor" class="mt-4 w-full md:w-auto px-10 py-4 bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold rounded-xl transition-colors shadow-md text-lg">
           Hitung Skor Risiko
         </button>
       </div>
 
       <!-- Live Update Sidebar -->
-      <div class="w-72 shrink-0">
+      <div class="w-full lg:w-72 shrink-0">
         <div class="bg-white rounded-xl border border-navy-200 shadow-sm p-5">
           <div class="flex items-center gap-2 mb-4">
             <span class="w-3 h-3 rounded-full bg-brand-danger animate-pulse-dot"></span>

@@ -14,7 +14,7 @@ function statusColor(s: string) {
 <template>
   <div class="animate-fade-in">
     <!-- Stat Cards -->
-    <div class="grid grid-cols-3 gap-5 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 mb-8">
       <div class="bg-white rounded-xl p-5 border border-navy-200 shadow-sm">
         <div class="flex justify-between items-start">
           <div>
@@ -64,8 +64,8 @@ function statusColor(s: string) {
 
     <!-- Recent History -->
     <h2 class="text-2xl font-bold text-navy-900 mb-4">Recent History</h2>
-    <div class="bg-white rounded-xl shadow-sm border border-navy-200 overflow-hidden">
-      <table class="w-full">
+    <div class="bg-white rounded-xl shadow-sm border border-navy-200 overflow-x-auto">
+      <table class="w-full min-w-[700px]">
         <thead>
           <tr class="border-b-2 border-navy-200">
             <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Sekolah</th>

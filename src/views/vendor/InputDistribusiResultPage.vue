@@ -14,9 +14,9 @@ function confirm() {
       <i class="pi pi-chevron-left text-xs"></i> Kembali
     </button>
 
-    <div class="flex gap-8 max-w-4xl mx-auto">
+    <div class="flex flex-col md:flex-row gap-6 md:gap-8 max-w-4xl mx-auto">
       <!-- Gauge -->
-      <div class="flex-1 bg-white rounded-xl border border-navy-200 shadow-sm p-8 flex flex-col items-center justify-center">
+      <div class="w-full md:flex-1 bg-white rounded-xl border border-navy-200 shadow-sm p-8 flex flex-col items-center justify-center">
         <div class="gauge-container mb-4">
           <svg viewBox="0 0 280 160" class="gauge-svg">
             <path d="M 30 150 A 110 110 0 0 1 250 150" fill="none" stroke="#e2e8f0" stroke-width="20" stroke-linecap="round"/>
@@ -34,8 +34,8 @@ function confirm() {
       </div>
 
       <!-- Breakdown -->
-      <div class="w-80 shrink-0">
-        <div class="border border-navy-200 rounded-xl p-6 bg-navy-100">
+      <div class="w-full md:w-80 shrink-0">
+        <div class="border border-navy-200 rounded-xl p-6 bg-navy-100 h-full">
           <h3 class="text-xl font-bold text-navy-900 mb-5">AI Analysis Breakdown</h3>
           <ul class="space-y-4">
             <li class="flex items-start gap-3">
@@ -55,8 +55,8 @@ function confirm() {
       </div>
     </div>
 
-    <div class="flex justify-center mt-10">
-      <button @click="confirm" class="px-12 py-4 bg-brand-success hover:opacity-90 text-white font-semibold rounded-xl transition-opacity shadow-md text-lg">
+    <div class="flex justify-center mt-8 md:mt-10">
+      <button @click="confirm" class="w-full sm:w-auto px-12 py-4 bg-brand-success hover:opacity-90 text-white font-semibold rounded-xl transition-opacity shadow-md text-lg">
         Konfirmasi & Mulai Distribusi
       </button>
     </div>

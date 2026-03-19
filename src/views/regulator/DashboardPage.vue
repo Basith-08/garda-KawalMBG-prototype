@@ -12,7 +12,7 @@ const topVendors = computed(() =>
 <template>
   <div class="animate-fade-in">
     <!-- Stat Cards -->
-    <div class="grid grid-cols-4 gap-5 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 mb-8">
       <div class="bg-white rounded-xl p-5 border border-navy-200 shadow-sm">
         <div class="flex justify-between items-start">
           <div>
@@ -70,9 +70,9 @@ const topVendors = computed(() =>
     </div>
 
     <!-- Map & Top Vendor -->
-    <div class="flex gap-6">
-      <div class="flex-1">
-        <div class="flex items-center gap-3 mb-4">
+    <div class="flex flex-col lg:flex-row gap-6">
+      <div class="flex-1 min-w-0">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4">
           <i class="pi pi-map text-xl text-navy-900"></i>
           <h2 class="text-2xl font-bold text-navy-900">Peta Risiko Distribusi</h2>
           <select class="ml-auto px-4 py-2 border border-navy-200 rounded-lg text-sm bg-white">
@@ -89,7 +89,7 @@ const topVendors = computed(() =>
           <p class="text-navy-500 text-sm">Map Placeholder</p>
         </div>
       </div>
-      <div class="w-72 shrink-0">
+      <div class="w-full lg:w-72 shrink-0">
         <div class="bg-navy-900 text-white rounded-t-xl px-6 py-4">
           <h3 class="text-lg font-bold">Top Vendor</h3>
         </div>

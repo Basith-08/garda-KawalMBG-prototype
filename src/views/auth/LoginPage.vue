@@ -40,7 +40,7 @@ function handleLogin() {
 
 <template>
   <div class="min-h-screen bg-navy-50 flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-white rounded-2xl shadow-lg border border-navy-200 p-10 animate-fade-in">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-lg border border-navy-200 p-6 sm:p-10 animate-fade-in">
       <h1 class="text-2xl font-bold text-navy-900 text-center mb-2">Login to Account</h1>
       <p class="text-navy-500 text-sm text-center mb-8">Please enter your email and password to continue</p>
 

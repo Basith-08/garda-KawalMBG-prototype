@@ -28,7 +28,7 @@ function addDocument() {
 
 <template>
   <div class="animate-fade-in">
-    <div class="flex justify-between items-start mb-8">
+    <div class="flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-0 mb-8">
       <div>
         <h1 class="text-2xl font-bold text-navy-900 mb-2">Pusat Sertifikasi & Izin</h1>
         <p class="text-navy-500 text-sm">Pastikan semua dokumen aktif untuk menjaga kontrak dengan BGN.</p>
@@ -38,7 +38,7 @@ function addDocument() {
       </button>
     </div>
 
-    <div class="grid grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
       <div v-for="doc in documents" :key="doc.id" class="bg-white rounded-xl border border-navy-200 shadow-sm p-6 relative hover:shadow-md transition-shadow">
         <span
           class="absolute top-4 right-4 text-white text-xs font-bold px-3 py-1 rounded-full"
@@ -56,8 +56,8 @@ function addDocument() {
     </div>
 
     <!-- Modal -->
-    <div v-if="showModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click.self="showModal = false">
-      <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-8 animate-fade-in">
+    <div v-if="showModal" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" @click.self="showModal = false">
+      <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6 sm:p-8 animate-fade-in">
         <div class="flex justify-between items-center mb-6">
           <h2 class="text-lg font-bold text-navy-900">Tambah Dokumen Baru</h2>
           <button @click="showModal = false" class="text-navy-500 hover:text-navy-900">

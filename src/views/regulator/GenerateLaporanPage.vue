@@ -12,7 +12,7 @@ const reportTypes = [
 
 <template>
   <div class="animate-fade-in">
-    <div class="flex justify-between items-start mb-8">
+    <div class="flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-0 mb-8">
       <div>
         <h1 class="text-3xl font-bold text-navy-900 mb-2">Generate Report & Audit</h1>
         <p class="text-navy-500">Ekspor data komprehensif untuk kebutuhan audit BPK/BGN.</p>
@@ -23,7 +23,7 @@ const reportTypes = [
     </div>
 
     <h2 class="text-xl font-bold text-navy-900 mb-4">Jenis Laporan</h2>
-    <div class="flex gap-6 mb-10">
+    <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-8 sm:mb-10">
       <button
         v-for="(rt, i) in reportTypes" :key="i"
         @click="selectedReport = i"
@@ -35,7 +35,7 @@ const reportTypes = [
       </button>
     </div>
 
-    <div class="flex gap-16 mb-10">
+    <div class="flex flex-col sm:flex-row gap-6 sm:gap-16 mb-10">
       <div>
         <h2 class="text-xl font-bold text-navy-900 mb-4">Rentang Waktu</h2>
         <select class="px-5 py-3 border border-navy-200 rounded-lg text-sm bg-white min-w-[200px]">
@@ -61,7 +61,7 @@ const reportTypes = [
       </div>
     </div>
 
-    <button class="px-10 py-4 bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold rounded-xl transition-colors shadow-md text-lg">
+    <button class="w-full sm:w-auto px-10 py-4 bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold rounded-xl transition-colors shadow-md text-lg">
       Unduh Laporan Audit
     </button>
   </div>

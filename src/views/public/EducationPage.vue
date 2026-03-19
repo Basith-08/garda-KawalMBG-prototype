@@ -10,11 +10,11 @@ const faqs = ref([
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto px-8 py-8 animate-fade-in">
+  <div class="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8 animate-fade-in">
     <!-- Header -->
-    <div class="text-center mb-12">
-      <div class="flex items-center justify-center gap-6 mb-4">
-        <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center">
+    <div class="text-center mb-8 md:mb-12">
+      <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-6">
+        <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
           <i class="pi pi-graduation-cap text-3xl text-brand-accent"></i>
         </div>
         <div>
@@ -30,7 +30,7 @@ const faqs = ref([
     </div>
 
     <!-- Articles Skeleton -->
-    <div class="flex gap-8 mb-16">
+    <div class="flex flex-col-reverse md:flex-row gap-6 md:gap-8 mb-12 md:mb-16">
       <div class="flex-1 space-y-4">
         <div class="h-8 bg-navy-200 rounded w-4/5"></div>
         <div class="h-6 bg-navy-200 rounded w-3/5"></div>
@@ -38,12 +38,12 @@ const faqs = ref([
         <div class="h-8 bg-navy-200 rounded w-full"></div>
         <div class="h-8 bg-navy-200 rounded w-4/6"></div>
       </div>
-      <div class="w-80 h-56 bg-navy-200 rounded-xl shrink-0"></div>
+      <div class="w-full md:w-80 h-48 md:h-56 bg-navy-200 rounded-xl shrink-0"></div>
     </div>
 
     <!-- FAQ Section -->
-    <h2 class="text-2xl font-bold text-navy-900 text-center mb-8">FAQ</h2>
-    <div class="grid grid-cols-2 gap-6 max-w-5xl mx-auto">
+    <h2 class="text-2xl font-bold text-navy-900 text-center mb-6 md:mb-8">FAQ</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto">
       <div
         v-for="(faq, i) in faqs"
         :key="i"

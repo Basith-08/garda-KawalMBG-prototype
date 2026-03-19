@@ -21,18 +21,20 @@ function statusColor(s: string) {
 
 <template>
   <div class="animate-fade-in">
-    <div class="flex items-center gap-3 mb-4">
-      <input v-model="searchQuery" type="text" placeholder="Masukan nama  vendor" class="flex-1 px-5 py-3.5 border border-navy-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent" />
-      <button class="w-12 h-12 rounded-full border border-navy-300 flex items-center justify-center hover:bg-navy-100"><i class="pi pi-search text-navy-600"></i></button>
-      <button class="w-12 h-12 rounded-full bg-navy-900 text-white flex items-center justify-center hover:bg-navy-800"><i class="pi pi-filter"></i></button>
+    <div class="flex flex-col sm:flex-row items-center gap-3 mb-4">
+      <input v-model="searchQuery" type="text" placeholder="Masukan nama vendor" class="w-full sm:flex-1 px-5 py-3.5 border border-navy-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent" />
+      <div class="flex gap-3 w-full sm:w-auto justify-end">
+        <button class="w-12 h-12 rounded-full border border-navy-300 flex items-center justify-center hover:bg-navy-100 shrink-0"><i class="pi pi-search text-navy-600"></i></button>
+        <button class="w-12 h-12 rounded-full bg-navy-900 text-white flex items-center justify-center hover:bg-navy-800 shrink-0"><i class="pi pi-filter"></i></button>
+      </div>
     </div>
     <div class="mb-4 flex items-center gap-2">
       <span class="text-sm text-navy-600">Filter aktif:</span>
       <span class="bg-navy-200 text-navy-600 text-xs px-3 py-1 rounded-full flex items-center gap-1">Semua <button class="ml-1">×</button></span>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-navy-200 overflow-hidden">
-      <table class="w-full">
+    <div class="bg-white rounded-xl shadow-sm border border-navy-200 overflow-x-auto">
+      <table class="w-full min-w-[800px]">
         <thead>
           <tr class="border-b-2 border-navy-200">
             <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Vendor</th>

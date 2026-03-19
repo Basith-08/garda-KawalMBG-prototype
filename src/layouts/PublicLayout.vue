@@ -7,9 +7,9 @@ const route = useRoute()
 <template>
   <div class="min-h-screen flex flex-col">
     <!-- Top Bar -->
-    <header class="bg-navy-900 text-white px-6 py-3 flex items-center justify-between sticky top-0 z-50">
-      <router-link to="/" class="text-xl font-bold tracking-tight hover:opacity-90 transition-opacity">KawalMBG</router-link>
-      <nav class="flex items-center gap-6">
+    <header class="bg-navy-900 text-white px-4 md:px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-md">
+      <router-link to="/" class="text-lg md:text-xl font-bold tracking-tight hover:opacity-90 transition-opacity">KawalMBG</router-link>
+      <nav class="flex items-center gap-4 md:gap-6">
         <router-link
           to="/vendor-score"
           class="text-sm font-medium transition-colors"

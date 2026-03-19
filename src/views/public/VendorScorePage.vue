@@ -19,23 +19,25 @@ function statusColor(status: string) {
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto px-8 py-8 animate-fade-in">
-    <div class="flex gap-8">
+  <div class="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8 animate-fade-in">
+    <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
       <!-- Left: Search & Table -->
-      <div class="flex-1">
-        <div class="flex items-center gap-3 mb-4">
+      <div class="flex-1 min-w-0">
+        <div class="flex flex-col sm:flex-row items-center gap-3 mb-4 w-full">
           <input
             v-model="searchQuery"
             type="text"
             placeholder="Masukkan nama sekolah (contoh: SDN 01 Menteng)..."
-            class="flex-1 px-4 py-3 border border-navy-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent"
+            class="w-full sm:w-auto sm:flex-1 px-4 py-3 border border-navy-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent"
           />
-          <button class="w-12 h-12 rounded-full border border-navy-300 flex items-center justify-center hover:bg-navy-100 transition-colors">
-            <i class="pi pi-search text-navy-600"></i>
-          </button>
-          <button class="w-12 h-12 rounded-full bg-navy-900 text-white flex items-center justify-center hover:bg-navy-800 transition-colors">
-            <i class="pi pi-filter"></i>
-          </button>
+          <div class="flex items-center gap-3 w-full sm:w-auto shrink-0 justify-end">
+            <button class="w-12 h-12 rounded-full border border-navy-300 flex items-center justify-center hover:bg-navy-100 transition-colors">
+              <i class="pi pi-search text-navy-600"></i>
+            </button>
+            <button class="w-12 h-12 rounded-full bg-navy-900 text-white flex items-center justify-center hover:bg-navy-800 transition-colors">
+              <i class="pi pi-filter"></i>
+            </button>
+          </div>
         </div>
 
         <div class="mb-4 flex items-center gap-2">
@@ -45,8 +47,8 @@ function statusColor(status: string) {
           </span>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-navy-200 overflow-hidden">
-          <table class="w-full">
+        <div class="bg-white rounded-xl shadow-sm border border-navy-200 overflow-x-auto">
+          <table class="w-full min-w-[700px]">
             <thead>
               <tr class="border-b-2 border-navy-200">
                 <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Sekolah</th>
@@ -79,8 +81,8 @@ function statusColor(status: string) {
       </div>
 
       <!-- Right: Legend -->
-      <div class="w-80 shrink-0">
-        <div class="bg-white rounded-xl shadow-sm border border-navy-200 p-6">
+      <div class="w-full lg:w-80 shrink-0">
+        <div class="bg-white rounded-xl shadow-sm border border-navy-200 p-6 sticky top-24">
           <h3 class="text-xl font-bold text-navy-900 mb-4">Keterangan:</h3>
           <ul class="space-y-4">
             <li>

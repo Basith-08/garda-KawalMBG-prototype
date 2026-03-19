@@ -22,14 +22,14 @@ function statusColor(s: string) {
     </router-link>
 
     <!-- Vendor Info -->
-    <div class="flex gap-8 mb-10">
-      <div class="w-52 h-44 bg-navy-200 rounded-xl shrink-0"></div>
+    <div class="flex flex-col md:flex-row gap-6 md:gap-8 mb-8 md:mb-10">
+      <div class="w-full md:w-52 h-48 md:h-44 bg-navy-200 rounded-xl shrink-0"></div>
       <div class="flex-1 py-2">
         <h1 class="text-3xl font-bold text-navy-900 mb-2">{{ vendor.name }}</h1>
         <p class="text-navy-600 mb-1"><span class="font-bold">Bergabung sejak</span> {{ vendor.joinDate }}</p>
         <p class="text-navy-600"><span class="font-bold">Alamat</span> {{ vendor.address }}</p>
       </div>
-      <div class="w-60 shrink-0 space-y-3">
+      <div class="w-full md:w-60 shrink-0 space-y-3">
         <div class="h-6 bg-navy-200 rounded w-full"></div>
         <div class="h-20 bg-navy-200 rounded w-full"></div>
       </div>
@@ -37,8 +37,8 @@ function statusColor(s: string) {
 
     <!-- Log Distribusi -->
     <h2 class="text-2xl font-bold text-navy-900 mb-4">Log Distribusi Terakhir</h2>
-    <div class="bg-white rounded-xl shadow-sm border border-navy-200 overflow-hidden mb-10">
-      <table class="w-full">
+    <div class="bg-white rounded-xl shadow-sm border border-navy-200 overflow-x-auto mb-8 md:mb-10">
+      <table class="w-full min-w-[800px]">
         <thead>
           <tr class="border-b-2 border-navy-200">
             <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Sekolah</th>

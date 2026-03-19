@@ -15,7 +15,7 @@ const dist = computed(() => data.distributions.find((d: any) => d.id === route.p
       <i class="pi pi-chevron-left text-xs"></i> Kembali
     </button>
 
-    <div class="flex justify-between items-start mb-6">
+    <div class="flex flex-col md:flex-row justify-between items-start gap-4 md:gap-0 mb-6">
       <div>
         <span class="inline-block bg-navy-800 text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-3">Detail Distribusi</span>
         <h1 class="text-2xl font-bold text-navy-900 mb-1">{{ dist.menuName }}</h1>
@@ -33,7 +33,7 @@ const dist = computed(() => data.distributions.find((d: any) => d.id === route.p
     </div>
 
     <!-- AI Risk + Photos -->
-    <div class="flex gap-8 mb-8">
+    <div class="flex flex-col lg:flex-row gap-6 lg:gap-8 mb-8">
       <!-- AI Risk -->
       <div class="flex-1">
         <div class="bg-navy-800 text-white px-6 py-3 rounded-t-xl">
@@ -67,7 +67,7 @@ const dist = computed(() => data.distributions.find((d: any) => d.id === route.p
       <!-- Photos -->
       <div class="flex-1">
         <h3 class="text-xl font-bold text-navy-900 mb-4">Bukti Visual Lapangan</h3>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <img src="https://images.unsplash.com/photo-1567521464027-f127ff144326?w=400&h=250&fit=crop" class="w-full h-40 object-cover rounded-xl" alt="foto produksi" />
             <p class="text-xs text-navy-500 mt-2 text-center">Foto Produksi (Vendor)</p>
