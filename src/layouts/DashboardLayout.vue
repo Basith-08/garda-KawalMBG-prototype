@@ -105,7 +105,11 @@ function handleLogout() {
 
       <!-- Page Content -->
       <main class="flex-1 p-4 md:p-6 bg-navy-50 overflow-y-auto overflow-x-hidden relative">
-        <router-view />
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </main>
     </div>
   </div>

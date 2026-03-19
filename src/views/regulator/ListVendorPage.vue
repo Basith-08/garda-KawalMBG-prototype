@@ -66,6 +66,10 @@ function statusColor(s: string) {
           </tr>
         </tbody>
       </table>
+      <div v-if="filtered.length === 0" class="p-10 text-center text-navy-500 bg-white border-b border-navy-100">
+        <i class="pi pi-inbox text-4xl mb-3 text-navy-300"></i>
+        <p>Tidak ada vendor yang sesuai dengan pencarian.</p>
+      </div>
       <div class="flex justify-end items-center gap-2 px-6 py-4 border-t border-navy-100">
         <button class="w-8 h-8 rounded border border-navy-200 flex items-center justify-center text-navy-500 hover:bg-navy-100"><i class="pi pi-chevron-left text-xs"></i></button>
         <button class="w-8 h-8 rounded flex items-center justify-center text-sm font-semibold" :class="page === 1 ? 'bg-brand-accent text-white' : 'border border-navy-200 text-navy-600'" @click="page = 1">1</button>

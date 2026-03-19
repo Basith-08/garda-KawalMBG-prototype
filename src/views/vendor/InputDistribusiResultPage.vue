@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useToast } from 'primevue/usetoast'
 
 const router = useRouter()
+const toast = useToast()
 
 function confirm() {
+  toast.add({ severity: 'success', summary: 'Distribusi Dimulai', detail: 'Data berhasil diverifikasi dan direkam ke blockchain log', life: 4000 })
   router.push('/vendor/history')
 }
 </script>

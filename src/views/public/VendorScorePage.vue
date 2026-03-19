@@ -77,6 +77,10 @@ function statusColor(status: string) {
               </tr>
             </tbody>
           </table>
+          <div v-if="filteredSchools.length === 0" class="p-10 text-center text-navy-500 bg-white">
+            <i class="pi pi-inbox text-4xl mb-3 text-navy-300"></i>
+            <p>Tidak ada sekolah yang sesuai dengan pencarian.</p>
+          </div>
         </div>
       </div>
 

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { getData, saveData, type Document } from '@/services/localStorage'
+import { useToast } from 'primevue/usetoast'
 
+const toast = useToast()
 const data = getData()
 const documents = ref<Document[]>(data.documents)
 const showModal = ref(false)
@@ -23,6 +25,7 @@ function addDocument() {
   newDocName.value = ''
   newDocExpiry.value = ''
   showModal.value = false
+  toast.add({ severity: 'success', summary: 'Success', detail: 'Dokumen berhasil ditambahkan', life: 3000 })
 }
 </script>
 
