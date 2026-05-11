@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { getData, type School } from '@/services/api'
+import { getData } from '@/services/api'
 
 const data = getData()
-const schools = ref<School[]>(data.schools)
 const searchQuery = ref('')
 
 const filteredSchools = computed(() => {
-  if (!searchQuery.value) return schools.value
-  return schools.value.filter(s => s.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
+  if (!searchQuery.value) return data.schools
+  return data.schools.filter((s) => s.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
 })
 
 function statusColor(status: string) {

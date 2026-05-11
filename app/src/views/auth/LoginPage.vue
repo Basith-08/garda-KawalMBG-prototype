@@ -25,15 +25,17 @@ async function handleLogin() {
     return
   }
 
-  const success = await authStore.login(email.value, password.value)
-  if (success) {
-    if (authStore.user?.role === 'regulator') {
+  const resultLogin = await authStore.login(email.value, password.value)
+  if (resultLogin.ok) {
+    if (authStore.user?.role === 'super-admin') {
+      router.push('/super-admin/dashboard')
+    } else if (authStore.user?.role === 'regulator') {
       router.push('/regulator/dashboard')
     } else {
       router.push('/vendor/dashboard')
     }
   } else {
-    error.value = 'Email harus mengandung "vendor" atau "regulator"'
+    error.value = resultLogin.error
   }
 }
 </script>
@@ -88,8 +90,10 @@ async function handleLogin() {
         </p>
       </form>
 
-      <div class="mt-6 p-3 bg-blue-50 rounded-lg text-xs text-navy-600">
-        <strong>Hint:</strong> Gunakan email dengan kata "regulator" (misal: regulator@test.com) untuk masuk sebagai Regulator, atau "vendor" (misal: vendor@test.com) untuk Vendor. Password bebas.
+      <div class="mt-6 p-3 bg-blue-50 rounded-lg text-xs text-navy-600 space-y-1">
+        <p><strong>Super Admin:</strong> `superadmin@garda.id` / `password123`</p>
+        <p><strong>Regulator:</strong> `regulator@garda.id` / `password123`</p>
+        <p><strong>Vendor:</strong> `vendor@garda.id` / `password123`</p>
       </div>
     </div>
   </div>

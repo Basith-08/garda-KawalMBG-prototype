@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { getData, type Alert } from '@/services/api'
-import { ref } from 'vue'
+import { computed } from 'vue'
+import { getData } from '@/services/api'
 
 const data = getData()
-const alerts = ref<Alert[]>(data.alerts)
+const alerts = computed(() => data.alerts)
 </script>
 
 <template>

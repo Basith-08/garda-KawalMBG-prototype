@@ -1,12 +1,21 @@
+from typing import Optional
+from datetime import datetime, timezone
+
+from sqlalchemy.orm import Session
+
 from database import SessionLocal, engine
+from migrations import run_migrations
 import models
 from auth_utils import get_password_hash
 
-# Membuat tabel otomatis di Neon jika belum ada
+# Membuat tabel otomatis di database lokal jika belum ada
 models.Base.metadata.create_all(bind=engine)
-from auth_utils import get_password_hash
 
-mock_db_state = {
+
+def ensure_runtime_schema() -> None:
+    run_migrations()
+
+seed_db_state = {
     "vendors": [
         { "id": "1", "name": "PT. Nutrisi Jaya", "status": "safe", "statusText": "No Issues", "trustScore": 94.0, "trend": 5.1, "trendDir": "up", "address": "Jl. Kencana 12, Jakarta Selatan", "joinDate": "2024-01-15", "schools": ["SDN 01 Pusat", "SDN 05 Barat", "SD Harapan"] },
         { "id": "2", "name": "CV. Makan Sehat Indonesia", "status": "medium", "statusText": "2x Late Delivery", "trustScore": 74.0, "trend": 1.0, "trendDir": "up", "address": "Jl. Merdeka 45, Tangerang Selatan", "joinDate": "2024-03-10", "schools": ["SDN 05 Barat", "SDN 12 Timur"] },
@@ -65,14 +74,14 @@ mock_db_state = {
         { "id": "24", "vendorId": "15", "schoolName": "SDN 07 Selatan", "porsi": 310, "status": "safe", "statusText": "Safe", "time": "17 Mar 2026", "riskScore": 91.0, "menuName": "Nasi Opor Ayam", "menuUtama": "Nasi putih, Opor ayam, Perkedel, Timun", "suhu": 26.0, "durasi": 32, "levelRisiko": "LOW RISK", "catatan": "Semua parameter dalam batas aman. Konfirmasi guru positif." },
     ],
     "alerts": [
-        { "id": "1", "type": "CRITICAL", "vendorName": "CV. Katering Berkah Bersama", "description": "Risiko Keracunan Tinggi: Suhu BMKG 35°C + Waktu Tempuh > 2 Jam untuk SDN 01 Pusat", "time": "5 menit yang lalu", "statusTag": "Telegram Sent" },
-        { "id": "2", "type": "FRAUD", "vendorName": "PT. Dapur Sehat Mandiri", "description": "Anomali Klaim: Selisih 150 porsi antara klaim vendor vs laporan guru SDN 18 Utara", "time": "20 menit yang lalu", "statusTag": "Pending Review" },
-        { "id": "3", "type": "CRITICAL", "vendorName": "Katering Ibu Nusantara", "description": "Suhu kendaraan pengiriman 38°C. Makanan berpotensi terkontaminasi bakteri Salmonella untuk SD Harapan", "time": "45 menit yang lalu", "statusTag": "Telegram Sent" },
-        { "id": "4", "type": "FRAUD", "vendorName": "PT. Makanan Bergizi Nusantara", "description": "Fraud Confirmed: 200 porsi hilang dari total klaim 400 porsi ke SDN 22 Cempaka. Foto tidak sesuai.", "time": "1 jam yang lalu", "statusTag": "Under Investigation" },
-        { "id": "5", "type": "CRITICAL", "vendorName": "CV. Katering Berkah Bersama", "description": "Duplikasi pengiriman terdeteksi: Dua klaim distribusi ke SDN 22 Cempaka pada tanggal yang sama", "time": "2 jam yang lalu", "statusTag": "Pending Review" },
-        { "id": "6", "type": "FRAUD", "vendorName": "Katering Sekolah Bahagia", "description": "Anomali porsi: Laporan guru menunjukkan porsi 30% lebih kecil dari standar BNG di SDN 12 Timur", "time": "3 jam yang lalu", "statusTag": "Telegram Sent" },
-        { "id": "7", "type": "CRITICAL", "vendorName": "PT. Makanan Bergizi Nusantara", "description": "Sertifikat Laik Higiene expired sejak 2 bulan lalu. Vendor masih melakukan distribusi tanpa izin valid", "time": "5 jam yang lalu", "statusTag": "License Suspended" },
-        { "id": "8", "type": "FRAUD", "vendorName": "CV. Dapur Bunda Kreatif", "description": "Inkonsistensi data: Menu yang dilaporkan (Ayam Bakar) berbeda dengan foto aktual (Telur Ceplok) di SDN 14 Menteng", "time": "6 jam yang lalu", "statusTag": "Pending Review" },
+        { "id": "1", "type": "CRITICAL", "vendorId": "4", "vendorName": "CV. Katering Berkah Bersama", "description": "Risiko Keracunan Tinggi: Suhu BMKG 35°C + Waktu Tempuh > 2 Jam untuk SDN 01 Pusat", "time": "5 menit yang lalu", "statusTag": "Telegram Sent" },
+        { "id": "2", "type": "FRAUD", "vendorId": "5", "vendorName": "PT. Dapur Sehat Mandiri", "description": "Anomali Klaim: Selisih 150 porsi antara klaim vendor vs laporan guru SDN 18 Utara", "time": "20 menit yang lalu", "statusTag": "Pending Review" },
+        { "id": "3", "type": "CRITICAL", "vendorId": "3", "vendorName": "Katering Ibu Nusantara", "description": "Suhu kendaraan pengiriman 38°C. Makanan berpotensi terkontaminasi bakteri Salmonella untuk SD Harapan", "time": "45 menit yang lalu", "statusTag": "Telegram Sent" },
+        { "id": "4", "type": "FRAUD", "vendorId": "12", "vendorName": "PT. Makanan Bergizi Nusantara", "description": "Fraud Confirmed: 200 porsi hilang dari total klaim 400 porsi ke SDN 22 Cempaka. Foto tidak sesuai.", "time": "1 jam yang lalu", "statusTag": "Under Investigation" },
+        { "id": "5", "type": "CRITICAL", "vendorId": "4", "vendorName": "CV. Katering Berkah Bersama", "description": "Duplikasi pengiriman terdeteksi: Dua klaim distribusi ke SDN 22 Cempaka pada tanggal yang sama", "time": "2 jam yang lalu", "statusTag": "Pending Review" },
+        { "id": "6", "type": "FRAUD", "vendorId": "9", "vendorName": "Katering Sekolah Bahagia", "description": "Anomali porsi: Laporan guru menunjukkan porsi 30% lebih kecil dari standar BNG di SDN 12 Timur", "time": "3 jam yang lalu", "statusTag": "Telegram Sent" },
+        { "id": "7", "type": "CRITICAL", "vendorId": "12", "vendorName": "PT. Makanan Bergizi Nusantara", "description": "Sertifikat Laik Higiene expired sejak 2 bulan lalu. Vendor masih melakukan distribusi tanpa izin valid", "time": "5 jam yang lalu", "statusTag": "License Suspended" },
+        { "id": "8", "type": "FRAUD", "vendorId": "11", "vendorName": "CV. Dapur Bunda Kreatif", "description": "Inkonsistensi data: Menu yang dilaporkan (Ayam Bakar) berbeda dengan foto aktual (Telur Ceplok) di SDN 14 Menteng", "time": "6 jam yang lalu", "statusTag": "Pending Review" },
     ],
     "documents": [
         { "id": "1", "vendorId": "2", "name": "Sertifikat Laik Higiene Sanitasi", "expiry": "20 Des 2026", "status": "Valid" },
@@ -86,39 +95,51 @@ mock_db_state = {
         { "id": "9", "vendorId": "2", "name": "Sertifikat ISO 22000 (Food Safety)", "expiry": "12 Nov 2025", "status": "Expired" },
     ],
     "users": [
-        { "id": "1", "name": "Catur Regulator", "email": "regulator@garda.id", "hashed_password": get_password_hash("password123"), "role": "regulator", "avatar": "https://i.pravatar.cc/80?u=regulator" },
-        { "id": "2", "name": "Budi Vendor", "email": "vendor@garda.id", "hashed_password": get_password_hash("password123"), "role": "vendor", "avatar": "https://i.pravatar.cc/80?u=vendor" }
+        { "id": "1", "name": "Catur Regulator", "email": "regulator@garda.id", "hashed_password": get_password_hash("password123"), "role": "regulator", "vendorId": None, "isActive": True, "createdAt": datetime(2026, 3, 19, 8, 0, tzinfo=timezone.utc), "lastLoginAt": None, "avatar": "https://i.pravatar.cc/80?u=regulator" },
+        { "id": "2", "name": "Budi Vendor", "email": "vendor@garda.id", "hashed_password": get_password_hash("password123"), "role": "vendor", "vendorId": "2", "isActive": True, "createdAt": datetime(2026, 3, 19, 8, 5, tzinfo=timezone.utc), "lastLoginAt": None, "avatar": "https://i.pravatar.cc/80?u=vendor" },
+        { "id": "100", "name": "Sari Super Admin", "email": "superadmin@garda.id", "hashed_password": get_password_hash("password123"), "role": "super-admin", "vendorId": None, "isActive": True, "createdAt": datetime(2026, 3, 19, 7, 45, tzinfo=timezone.utc), "lastLoginAt": None, "avatar": "https://i.pravatar.cc/80?u=super-admin" }
     ]
 }
 
-def seed_database():
-    db = SessionLocal()
+
+def is_database_seeded(db: Session) -> bool:
+    return db.query(models.User).first() is not None
+
+
+def seed_database(db: Optional[Session] = None, only_if_empty: bool = False) -> bool:
+    owns_session = db is None
+    db = db or SessionLocal()
     try:
-        if "vendors" in mock_db_state:
-            for v_data in mock_db_state["vendors"]:
+        ensure_runtime_schema()
+        if only_if_empty and is_database_seeded(db):
+            return False
+        if "vendors" in seed_db_state:
+            for v_data in seed_db_state["vendors"]:
                 db.merge(models.Vendor(**v_data))
-        if "schools" in mock_db_state:
-            for s_data in mock_db_state["schools"]:
+        if "schools" in seed_db_state:
+            for s_data in seed_db_state["schools"]:
                 db.merge(models.School(**s_data))
-        if "distributions" in mock_db_state:
-            for d_data in mock_db_state["distributions"]:
+        if "distributions" in seed_db_state:
+            for d_data in seed_db_state["distributions"]:
                 db.merge(models.Distribution(**d_data))
-        if "alerts" in mock_db_state:
-            for a_data in mock_db_state["alerts"]:
+        if "alerts" in seed_db_state:
+            for a_data in seed_db_state["alerts"]:
                 db.merge(models.Alert(**a_data))
-        if "documents" in mock_db_state:
-            for doc_data in mock_db_state["documents"]:
+        if "documents" in seed_db_state:
+            for doc_data in seed_db_state["documents"]:
                 db.merge(models.Document(**doc_data))
-        if "users" in mock_db_state:
-            for u_data in mock_db_state["users"]:
+        if "users" in seed_db_state:
+            for u_data in seed_db_state["users"]:
                 db.merge(models.User(**u_data))
         db.commit()
-        print("Database seeded successfully!")
+        return True
     except Exception as e:
         db.rollback()
-        print(f"Error seeding database: {e}")
+        raise RuntimeError(f"Error seeding database: {e}") from e
     finally:
-        db.close()
+        if owns_session:
+            db.close()
 
 if __name__ == "__main__":
-    seed_database()
+    changed = seed_database()
+    print("Database seeded successfully!" if changed else "Database already seeded; skipping.")

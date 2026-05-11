@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { getData, type Vendor } from '@/services/api'
+import { getData } from '@/services/api'
 
 const data = getData()
-const vendors = ref<Vendor[]>(data.vendors)
 const searchQuery = ref('')
 const page = ref(1)
 
 const filtered = computed(() => {
-  if (!searchQuery.value) return vendors.value
-  return vendors.value.filter(v => v.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
+  if (!searchQuery.value) return data.vendors
+  return data.vendors.filter((v) => v.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
 })
 
 function statusColor(s: string) {

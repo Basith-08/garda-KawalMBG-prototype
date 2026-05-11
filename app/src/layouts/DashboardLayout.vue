@@ -17,6 +17,10 @@ const regulatorMenu = [
   { label: 'Generate Laporan', to: '/regulator/reports', icon: 'pi pi-file' },
 ]
 
+const superAdminMenu = [
+  { label: 'Control Center', to: '/super-admin/dashboard', icon: 'pi pi-objects-column' },
+]
+
 const vendorMenu = [
   { label: 'Dashboard', to: '/vendor/dashboard', icon: 'pi pi-th-large' },
   { label: 'Input Distribusi', to: '/vendor/input-distribusi', icon: 'pi pi-pencil' },
@@ -24,7 +28,11 @@ const vendorMenu = [
   { label: 'Dokumen & Izin', to: '/vendor/documents', icon: 'pi pi-file' },
 ]
 
-const menu = computed(() => role.value === 'regulator' ? regulatorMenu : vendorMenu)
+const menu = computed(() => {
+  if (role.value === 'super-admin') return superAdminMenu
+  if (role.value === 'regulator') return regulatorMenu
+  return vendorMenu
+})
 
 function isActive(to: string) {
   return route.path.startsWith(to)
@@ -96,7 +104,10 @@ function handleLogout() {
             <img :src="authStore.user?.avatar" class="w-9 h-9 rounded-full object-cover border-2 border-navy-600" alt="avatar" />
             <div class="text-right hidden sm:block">
               <div class="text-sm font-semibold leading-tight">{{ authStore.user?.name }}</div>
-              <div class="text-xs capitalize" :class="role === 'regulator' ? 'text-brand-danger' : 'text-brand-success'">{{ role }}</div>
+              <div
+                class="text-xs capitalize"
+                :class="role === 'super-admin' ? 'text-amber-300' : role === 'regulator' ? 'text-brand-danger' : 'text-brand-success'"
+              >{{ role }}</div>
             </div>
             <i class="pi pi-chevron-down text-xs text-navy-400 hidden sm:block"></i>
           </div>

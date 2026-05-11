@@ -2,11 +2,13 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getData } from '@/services/api'
+import { assessDistribution } from '@/services/distributionAssessment'
 
 const route = useRoute()
 const router = useRouter()
 const data = getData()
 const dist = computed(() => data.distributions.find((d: any) => d.id === route.params.distId))
+const assessment = computed(() => (dist.value ? dist.value.assessment ?? assessDistribution(dist.value) : null))
 </script>
 
 <template>
@@ -19,15 +21,15 @@ const dist = computed(() => data.distributions.find((d: any) => d.id === route.p
       <div>
         <span class="inline-block bg-navy-800 text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-3">Detail Distribusi</span>
         <h1 class="text-2xl font-bold text-navy-900 mb-1">{{ dist.menuName }}</h1>
-        <p class="text-sm text-navy-500">18 Maret 2026 - {{ dist.schoolName }}</p>
+        <p class="text-sm text-navy-500">{{ dist.time }} - {{ dist.schoolName }}</p>
       </div>
-      <div class="bg-green-100 px-5 py-3 rounded-xl flex items-center gap-3">
-        <div class="w-10 h-10 bg-brand-success rounded-full flex items-center justify-center">
-          <i class="pi pi-check text-white text-lg"></i>
+      <div class="px-5 py-3 rounded-xl flex items-center gap-3" :class="assessment?.riskStatus === 'HIGH' ? 'bg-red-100' : assessment?.riskStatus === 'MEDIUM' ? 'bg-amber-100' : 'bg-green-100'">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center" :class="assessment?.riskStatus === 'HIGH' ? 'bg-red-600' : assessment?.riskStatus === 'MEDIUM' ? 'bg-amber-500' : 'bg-brand-success'">
+          <i :class="assessment?.riskStatus === 'HIGH' ? 'pi pi-exclamation-triangle' : assessment?.riskStatus === 'MEDIUM' ? 'pi pi-eye' : 'pi pi-check'" class="text-white text-lg"></i>
         </div>
         <div>
-          <p class="text-xs text-brand-success font-bold">Status Akhir</p>
-          <p class="text-sm font-bold text-brand-success">Berhasil Terverifikasi</p>
+          <p class="text-xs font-bold" :class="assessment?.riskStatus === 'HIGH' ? 'text-red-700' : assessment?.riskStatus === 'MEDIUM' ? 'text-amber-700' : 'text-brand-success'">Risk Status</p>
+          <p class="text-sm font-bold" :class="assessment?.riskStatus === 'HIGH' ? 'text-red-700' : assessment?.riskStatus === 'MEDIUM' ? 'text-amber-700' : 'text-brand-success'">{{ assessment?.riskStatus || dist.levelRisiko }}</p>
         </div>
       </div>
     </div>
@@ -37,29 +39,43 @@ const dist = computed(() => data.distributions.find((d: any) => d.id === route.p
       <!-- AI Risk -->
       <div class="flex-1">
         <div class="bg-navy-800 text-white px-6 py-3 rounded-t-xl">
-          <h3 class="text-lg font-bold">AI Risk Analysis</h3>
+          <h3 class="text-lg font-bold">Operational Risk Assessment</h3>
         </div>
-        <div class="bg-white border border-navy-200 border-t-0 rounded-b-xl p-6">
-          <div class="flex justify-between items-center mb-6">
-            <span class="text-sm font-medium text-navy-600">Level Risiko</span>
-            <span class="text-sm font-bold text-brand-success">{{ dist.levelRisiko }}</span>
+        <div v-if="assessment" class="bg-white border border-navy-200 border-t-0 rounded-b-xl p-6 space-y-6">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p class="text-sm font-medium text-navy-600 mb-1">Final Risk Score</p>
+              <p class="text-3xl font-bold text-navy-900">{{ assessment.finalRiskScore }}/100</p>
+            </div>
+            <div class="px-4 py-2 rounded-full text-sm font-bold" :class="assessment.riskStatus === 'HIGH' ? 'bg-red-100 text-red-700' : assessment.riskStatus === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'">
+              {{ assessment.riskStatus }}
+            </div>
           </div>
-          <!-- Gauge -->
-          <div class="flex flex-col items-center mb-4">
-            <div class="gauge-container">
-              <svg viewBox="0 0 280 160" class="gauge-svg">
-                <path d="M 30 150 A 110 110 0 0 1 250 150" fill="none" stroke="#e2e8f0" stroke-width="20" stroke-linecap="round"/>
-                <path d="M 30 150 A 110 110 0 0 1 140 40" fill="none" stroke="#94a3b8" stroke-width="20" stroke-linecap="round"/>
-              </svg>
-              <div class="absolute inset-0 flex items-center justify-center pt-8">
-                <span class="text-2xl font-bold text-navy-900">Medium</span>
-              </div>
-            </div>
-            <div class="flex justify-between w-64 mt-2">
-              <span class="text-sm font-bold text-navy-900">LOW</span>
-              <div class="w-6 h-6 rounded-full bg-navy-300"></div>
-              <span class="text-sm font-bold text-navy-900">HIGH</span>
-            </div>
+          <div>
+            <h4 class="text-sm font-bold text-navy-900 mb-2">Operational Summary</h4>
+            <p class="text-sm text-navy-600 leading-relaxed">{{ assessment.operationalSummary }}</p>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-navy-900 mb-2">Exposure Analysis</h4>
+            <ul class="space-y-2 text-sm text-navy-600">
+              <li v-for="item in assessment.exposureAnalysis" :key="item">• {{ item }}</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-navy-900 mb-2">SOP Violation Detection</h4>
+            <ul class="space-y-2 text-sm text-navy-600">
+              <li v-for="item in assessment.sopViolations" :key="item">• {{ item }}</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-navy-900 mb-2">Risk Factors</h4>
+            <ul class="space-y-2 text-sm text-navy-600">
+              <li v-for="item in assessment.riskFactors" :key="item">• {{ item }}</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-navy-900 mb-2">Recommended Action</h4>
+            <p class="text-sm text-navy-600 leading-relaxed">{{ assessment.recommendedAction }}</p>
           </div>
         </div>
       </div>
@@ -85,12 +101,12 @@ const dist = computed(() => data.distributions.find((d: any) => d.id === route.p
       <div class="flex gap-8 mb-4">
         <div>
           <div class="flex items-center gap-2 mb-1"><i class="pi pi-sun text-amber-300"></i></div>
-          <p class="text-xs text-navy-400">Suhu Lingkungan</p>
+          <p class="text-xs text-navy-400">Ambient Temperature</p>
           <p class="text-lg font-bold">{{ dist.suhu }}°C</p>
         </div>
         <div>
           <div class="flex items-center gap-2 mb-1"><i class="pi pi-truck text-brand-accent"></i></div>
-          <p class="text-xs text-navy-400">Durasi Distribusi</p>
+          <p class="text-xs text-navy-400">Distribution Duration</p>
           <p class="text-lg font-bold">{{ dist.durasi }} Menit</p>
         </div>
       </div>

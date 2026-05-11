@@ -1,19 +1,20 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { getData, type Alert, type Distribution } from '@/services/api'
-import * as XLSX from 'xlsx'
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
 
 const selectedReport = ref<number>(0)
 const selectedFormat = ref<string>('PDF')
+const isExporting = ref(false)
 
 const reportTypes = [
   { title: 'Laporan Akuntabilitas Fiskal', desc: 'Audit fraud disbursement & anomali klaim vendor.' },
-  { title: 'Laporan Performa Vendor', desc: 'Ringkasan insiden, risk score, & verifikasi guru.' },
+  { title: 'Laporan Performa Vendor', desc: 'Ringkasan operational risk score, insiden, dan verifikasi lapangan.' },
 ]
 
-function exportReport() {
+async function exportReport() {
+  if (isExporting.value) return
+
+  isExporting.value = true
   const data = getData()
   let rows: any[] = []
   let head: string[] = []
@@ -30,7 +31,7 @@ function exportReport() {
     }))
   } else {
     // Performa Vendor (Distributions)
-    head = ['Tanggal', 'Sekolah', 'Porsi', 'Risk Score', 'Level Risiko', 'Catatan AI']
+    head = ['Tanggal', 'Sekolah', 'Porsi', 'Operational Risk Score', 'Level Risiko', 'Catatan AI']
     rows = data.distributions.map((d: Distribution) => ({
       Tanggal: d.time,
       Sekolah: d.schoolName,
@@ -43,29 +44,39 @@ function exportReport() {
 
   const title = reportTypes[selectedReport.value].title
 
-  if (selectedFormat.value === 'EXCEL') {
-    const ws = XLSX.utils.json_to_sheet(rows)
-    const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, ws, 'Laporan')
-    XLSX.writeFile(wb, `${title.replace(/\s+/g, '_')}.xlsx`)
-  } else {
-    const doc = new jsPDF('landscape')
-    doc.setFontSize(16)
-    doc.text(title, 14, 15)
-    doc.setFontSize(10)
-    doc.text('Di-generate pada: ' + new Date().toLocaleString('id-ID'), 14, 22)
-    
-    const body = rows.map(r => Object.values(r) as any[])
-    autoTable(doc, {
-      startY: 28,
-      head: [head],
-      body: body,
-      theme: 'grid',
-      styles: { fontSize: 8 },
-      headStyles: { fillColor: [30, 41, 59] } // navy-900
-    })
-    
-    doc.save(`${title.replace(/\s+/g, '_')}.pdf`)
+  try {
+    if (selectedFormat.value === 'EXCEL') {
+      const XLSX = await import('xlsx')
+      const ws = XLSX.utils.json_to_sheet(rows)
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, ws, 'Laporan')
+      XLSX.writeFile(wb, `${title.replace(/\s+/g, '_')}.xlsx`)
+    } else {
+      const [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
+        import('jspdf'),
+        import('jspdf-autotable'),
+      ])
+
+      const doc = new jsPDF('landscape')
+      doc.setFontSize(16)
+      doc.text(title, 14, 15)
+      doc.setFontSize(10)
+      doc.text('Di-generate pada: ' + new Date().toLocaleString('id-ID'), 14, 22)
+
+      const body = rows.map((r) => Object.values(r) as any[])
+      autoTable(doc, {
+        startY: 28,
+        head: [head],
+        body,
+        theme: 'grid',
+        styles: { fontSize: 8 },
+        headStyles: { fillColor: [30, 41, 59] },
+      })
+
+      doc.save(`${title.replace(/\s+/g, '_')}.pdf`)
+    }
+  } finally {
+    isExporting.value = false
   }
 }
 </script>
@@ -118,8 +129,12 @@ function exportReport() {
       </div>
     </div>
 
-    <button @click="exportReport" class="w-full sm:w-auto px-10 py-4 bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold rounded-xl transition-colors shadow-md text-lg">
-      Unduh Laporan Audit
+    <button
+      @click="exportReport"
+      :disabled="isExporting"
+      class="w-full sm:w-auto px-10 py-4 bg-brand-accent hover:bg-brand-accent-hover disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-colors shadow-md text-lg"
+    >
+      {{ isExporting ? 'Menyiapkan Laporan...' : 'Unduh Laporan Audit' }}
     </button>
   </div>
 </template>

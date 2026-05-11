@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 import { getData, saveData, type Distribution } from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
+import { assessDistribution, statusFromRisk } from '@/services/distributionAssessment'
 
 const router = useRouter()
 const toast = useToast()
@@ -15,25 +16,50 @@ onMounted(() => {
   if (stored) draft.value = JSON.parse(stored)
 })
 
+const previewDistribution = computed<Distribution | null>(() => {
+  if (!draft.value) return null
+
+  return {
+    id: 'preview',
+    vendorId: authStore.user?.vendorId || '2',
+    schoolName: draft.value.schools?.[0] || 'Tujuan belum dipilih',
+    porsi: draft.value.jumlahPorsi || 0,
+    status: 'medium',
+    statusText: 'Pending Review',
+    time: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+    riskScore: 0,
+    menuName: draft.value.menuUtama?.split(',')[0] || 'Menu Baru',
+    menuUtama: draft.value.menuUtama || 'Menu belum diisi',
+    suhu: 32,
+    durasi: 45,
+    levelRisiko: 'MEDIUM',
+    catatan: 'Preview operasional menggunakan parameter distribusi default sebelum telemetri rute masuk.',
+  }
+})
+
+const previewAssessment = computed(() => (previewDistribution.value ? assessDistribution(previewDistribution.value) : null))
+
 function confirm() {
   if (draft.value) {
     const data = getData()
+    const assessment = previewAssessment.value
     draft.value.schools.forEach((school: string) => {
       const dist: Distribution = {
         id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
-        vendorId: authStore.user?.id || '2',
+        vendorId: authStore.user?.vendorId || '2',
         schoolName: school,
         porsi: draft.value.jumlahPorsi,
-        status: 'medium',
-        statusText: 'Pending Review',
+        status: statusFromRisk(assessment?.riskStatus || 'MEDIUM'),
+        statusText: 'Exposure Review',
         time: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
-        riskScore: 78,
+        riskScore: assessment?.finalRiskScore || 58,
         menuName: draft.value.menuUtama.split(',')[0] || 'Menu Baru',
         menuUtama: draft.value.menuUtama,
         suhu: 32,
         durasi: 45,
-        levelRisiko: 'MEDIUM',
-        catatan: 'Data dikirim via aplikasi. Menunggu balasan & validasi sensor.'
+        levelRisiko: `${assessment?.riskStatus || 'MEDIUM'} RISK`,
+        catatan: assessment?.operationalSummary || 'Data dikirim via aplikasi. Menunggu balasan & validasi sensor.',
+        assessment: assessment || undefined,
       }
       data.distributions.unshift(dist)
     })
@@ -53,40 +79,50 @@ function confirm() {
     </button>
 
     <div class="flex flex-col md:flex-row gap-6 md:gap-8 max-w-4xl mx-auto">
-      <!-- Gauge -->
-      <div class="w-full md:flex-1 bg-white rounded-xl border border-navy-200 shadow-sm p-8 flex flex-col items-center justify-center">
-        <div class="gauge-container mb-4">
-          <svg viewBox="0 0 280 160" class="gauge-svg">
-            <path d="M 30 150 A 110 110 0 0 1 250 150" fill="none" stroke="#e2e8f0" stroke-width="20" stroke-linecap="round"/>
-            <path d="M 30 150 A 110 110 0 0 1 140 40" fill="none" stroke="#94a3b8" stroke-width="20" stroke-linecap="round"/>
-          </svg>
-          <div class="absolute inset-0 flex items-center justify-center pt-8">
-            <span class="text-2xl font-bold text-navy-900">Medium</span>
+      <div v-if="previewAssessment && previewDistribution" class="w-full md:flex-1 bg-white rounded-xl border border-navy-200 shadow-sm p-8">
+        <div class="flex flex-wrap items-start justify-between gap-4 mb-6">
+          <div>
+            <p class="text-sm font-semibold text-navy-500 mb-2">Operational Risk Assessment</p>
+            <h2 class="text-3xl font-bold text-navy-900">{{ previewAssessment.finalRiskScore }}/100</h2>
+          </div>
+          <div class="px-4 py-2 rounded-full text-sm font-bold" :class="previewAssessment.riskStatus === 'HIGH' ? 'bg-red-100 text-red-700' : previewAssessment.riskStatus === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'">
+            {{ previewAssessment.riskStatus }}
           </div>
         </div>
-        <div class="flex justify-between w-64 mt-2">
-          <span class="text-sm font-bold text-navy-900">LOW</span>
-          <div class="w-6 h-6 rounded-full bg-navy-300"></div>
-          <span class="text-sm font-bold text-navy-900">HIGH</span>
+
+        <div class="space-y-5">
+          <div>
+            <h3 class="text-sm font-bold text-navy-900 mb-2">Operational Summary</h3>
+            <p class="text-sm text-navy-600 leading-relaxed">{{ previewAssessment.operationalSummary }}</p>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-navy-900 mb-2">Exposure Analysis</h3>
+            <ul class="space-y-2 text-sm text-navy-600">
+              <li v-for="item in previewAssessment.exposureAnalysis" :key="item">• {{ item }}</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-navy-900 mb-2">Recommended Action</h3>
+            <p class="text-sm text-navy-600 leading-relaxed">{{ previewAssessment.recommendedAction }}</p>
+          </div>
         </div>
       </div>
 
-      <!-- Breakdown -->
-      <div class="w-full md:w-80 shrink-0">
+      <div v-if="previewAssessment" class="w-full md:w-80 shrink-0">
         <div class="border border-navy-200 rounded-xl p-6 bg-navy-100 h-full">
-          <h3 class="text-xl font-bold text-navy-900 mb-5">AI Analysis Breakdown</h3>
+          <h3 class="text-xl font-bold text-navy-900 mb-5">SOP Violation Detection</h3>
           <ul class="space-y-4">
-            <li class="flex items-start gap-3">
+            <li v-for="item in previewAssessment.sopViolations" :key="item" class="flex items-start gap-3">
               <span class="w-3 h-3 bg-navy-300 rounded-full mt-1.5 shrink-0"></span>
-              <p class="text-sm text-navy-700">Suhu luar: 32°C <span class="text-brand-danger font-medium">(Risiko Sedang)</span></p>
+              <p class="text-sm text-navy-700">{{ item }}</p>
             </li>
-            <li class="flex items-start gap-3">
-              <span class="w-3 h-3 bg-navy-300 rounded-full mt-1.5 shrink-0"></span>
-              <p class="text-sm text-navy-700">Estimasi Tiba: 09:30 <span class="text-brand-success font-medium">(Tepat Waktu)</span></p>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="w-3 h-3 bg-navy-300 rounded-full mt-1.5 shrink-0"></span>
-              <p class="text-sm text-navy-700">Catatan: Menu santan sensitif suhu panas. Pastikan ventilasi kendaraan baik</p>
+          </ul>
+
+          <h3 class="text-xl font-bold text-navy-900 mt-8 mb-5">Risk Factors</h3>
+          <ul class="space-y-4">
+            <li v-for="item in previewAssessment.riskFactors" :key="item" class="flex items-start gap-3">
+              <span class="w-3 h-3 bg-brand-accent rounded-full mt-1.5 shrink-0"></span>
+              <p class="text-sm text-navy-700">{{ item }}</p>
             </li>
           </ul>
         </div>

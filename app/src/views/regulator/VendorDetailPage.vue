@@ -45,7 +45,7 @@ function statusColor(s: string) {
             <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Porsi</th>
             <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Status</th>
             <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Time</th>
-            <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Risk Score</th>
+            <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Operational Risk Score</th>
             <th class="px-6 py-4"></th>
           </tr>
         </thead>

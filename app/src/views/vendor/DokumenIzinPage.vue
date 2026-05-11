@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { getData, saveData, type Document } from '@/services/api'
 import { useToast } from 'primevue/usetoast'
 
 const toast = useToast()
 const data = getData()
-const documents = ref<Document[]>(data.documents)
+const documents = computed(() => data.documents)
 const showModal = ref(false)
 const newDocName = ref('')
 const newDocExpiry = ref('')
@@ -19,7 +19,6 @@ function addDocument() {
     expiry: newDocExpiry.value,
     status: 'Valid',
   }
-  documents.value.push(doc)
   data.documents.push(doc)
   saveData(data)
   newDocName.value = ''

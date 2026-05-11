@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { getData, type Distribution } from '@/services/api'
+import { getData } from '@/services/api'
 
 const data = getData()
-const distributions = ref<Distribution[]>(data.distributions)
 const searchQuery = ref('')
 
 const filtered = computed(() => {
-  if (!searchQuery.value) return distributions.value
-  return distributions.value.filter(d => d.schoolName.toLowerCase().includes(searchQuery.value.toLowerCase()))
+  if (!searchQuery.value) return data.distributions
+  return data.distributions.filter((d) => d.schoolName.toLowerCase().includes(searchQuery.value.toLowerCase()))
 })
 
 function statusColor(s: string) {
@@ -40,7 +39,7 @@ function statusColor(s: string) {
             <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Porsi</th>
             <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Status</th>
             <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Time</th>
-            <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Risk Score</th>
+            <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Operational Risk Score</th>
             <th class="px-6 py-4"></th>
           </tr>
         </thead>

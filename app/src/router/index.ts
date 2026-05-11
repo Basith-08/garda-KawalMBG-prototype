@@ -34,6 +34,15 @@ const router = createRouter({
       ],
     },
     {
+      path: '/super-admin',
+      component: () => import('@/layouts/DashboardLayout.vue'),
+      meta: { requiresAuth: true, role: 'super-admin' },
+      children: [
+        { path: '', redirect: '/super-admin/dashboard' },
+        { path: 'dashboard', name: 'super-admin-dashboard', component: () => import('@/views/admin/SuperAdminDashboardPage.vue') },
+      ],
+    },
+    {
       path: '/vendor',
       component: () => import('@/layouts/DashboardLayout.vue'),
       meta: { requiresAuth: true, role: 'vendor' },
@@ -51,9 +60,9 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, _from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
-  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+  if (to.meta.requiresAuth && !(await authStore.restoreSession())) {
     next({ name: 'login' })
   } else if (to.meta.role && authStore.user?.role !== to.meta.role) {
     next({ name: 'login' })

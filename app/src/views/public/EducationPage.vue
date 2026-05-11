@@ -11,7 +11,7 @@ const articles = ref([
   },
   {
     title: 'Memahami Cara Kerja AI Risk Engine',
-    desc: 'Penjelasan detail bagaimana korelasi suhu lingkungan dan durasi rute memengaruhi kalkulasi tingkat risiko bakteri Salmonella.',
+    desc: 'Penjelasan detail bagaimana suhu lingkungan, durasi rute, dan exposure chain memengaruhi operational risk score.',
     date: '15 Jan 2026',
     readTime: '6 Min Read',
     img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=400&h=250'
@@ -26,8 +26,8 @@ const articles = ref([
 ])
 
 const faqs = ref([
-  { q: 'Apa itu platform KawalMBG?', a: 'KawalMBG adalah purwarupa sistem monitoring digital distribusi Program Makan Bergizi Gratis (MBG) berbasis AI untuk transparansi pangan dan uang negara secara real-time.', open: false },
-  { q: 'Mengapa vendor perlu "Input Distribusi"?', a: 'Input ini memastikan seluruh jadwal logistik masuk ke dalam radar pengawasan AI Risk Engine, sehingga risiko basi atau keracunan dapat dicegah sedini mungkin.', open: false },
+  { q: 'Apa itu platform KawalMBG?', a: 'KawalMBG adalah platform monitoring digital distribusi Program Makan Bergizi Gratis (MBG) berbasis operational intelligence untuk transparansi pangan dan akuntabilitas layanan secara real-time.', open: false },
+  { q: 'Mengapa vendor perlu "Input Distribusi"?', a: 'Input ini memastikan seluruh jadwal logistik masuk ke dalam radar operational risk engine, sehingga unsafe consumption probability dan pelanggaran SOP dapat ditekan sedini mungkin.', open: false },
   { q: 'Siapa yang memvalidasi data penerimaan sekolah?', a: 'Pihak sekolah (Guru/Kepala Sekolah) memiliki aplikasi terpisah untuk memfoto makanan yang tiba. AI akan membandingkan foto vendor vs foto guru untuk mencegah fraud.', open: false },
   { q: 'Saya menemukan keganjilan data, lapor kemana?', a: 'Anda dapat langsung menekan tombol "Hubungi CS KawalMBG" yang tersedia di halaman ini, atau menghubungi saluran Call Center resmi BGN di 1-500-xxx.', open: false },
 ])

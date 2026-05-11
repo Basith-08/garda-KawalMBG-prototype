@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Float, JSON
+from sqlalchemy import Column, String, Integer, Float, JSON, Boolean, DateTime, ForeignKey
 from database import Base
 
 class Vendor(Base):
@@ -22,7 +22,7 @@ class School(Base):
     name = Column(String)
     npsn = Column(String)
     address = Column(String)
-    vendorId = Column(String, index=True)
+    vendorId = Column(String, ForeignKey("vendors.id"), index=True)
     vendorName = Column(String)
     trustScore = Column(Float)
     status = Column(String)
@@ -32,7 +32,7 @@ class Distribution(Base):
     __tablename__ = "distributions"
     
     id = Column(String, primary_key=True, index=True)
-    vendorId = Column(String, index=True)
+    vendorId = Column(String, ForeignKey("vendors.id"), index=True)
     schoolName = Column(String)
     porsi = Column(Integer)
     status = Column(String)
@@ -51,6 +51,7 @@ class Alert(Base):
     
     id = Column(String, primary_key=True, index=True)
     type = Column(String)
+    vendorId = Column(String, ForeignKey("vendors.id"), index=True, nullable=True)
     vendorName = Column(String)
     description = Column(String)
     time = Column(String)
@@ -60,7 +61,7 @@ class Document(Base):
     __tablename__ = "documents"
     
     id = Column(String, primary_key=True, index=True)
-    vendorId = Column(String, index=True)
+    vendorId = Column(String, ForeignKey("vendors.id"), index=True)
     name = Column(String)
     expiry = Column(String)
     status = Column(String)
@@ -73,5 +74,8 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     role = Column(String)
+    vendorId = Column(String, ForeignKey("vendors.id"), index=True, nullable=True)
+    isActive = Column(Boolean, nullable=False, default=True)
+    createdAt = Column(DateTime(timezone=True), nullable=True)
+    lastLoginAt = Column(DateTime(timezone=True), nullable=True)
     avatar = Column(String)
-

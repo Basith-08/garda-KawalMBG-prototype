@@ -1,0 +1,71 @@
+# Pekerjaan
+
+- Membaca `FLOW.md` dan mengidentifikasi bahwa task utamanya adalah menyelaraskan wording, semantik risk score, dan format assessment distribusi dengan standar operational food safety.
+- Menelusuri alur paling relevan dari feature distribusi: `LandingPage`/`EducationPage` -> `DistributionDetailPage`/`HistoryDetailPage` -> `api.ts` -> `backend/main.py`.
+- Menambahkan helper assessment operasional di backend pada `backend/risk_assessment.py` untuk menghasilkan:
+  - `operationalSummary`
+  - `exposureAnalysis`
+  - `sopViolations`
+  - `riskFactors`
+  - `finalRiskScore`
+  - `riskStatus`
+  - `recommendedAction`
+- Mengubah `backend/main.py` agar response `/api/data` menormalisasi data distribusi ke semantik `riskScore` yang sesuai `FLOW.md`, serta mengabaikan field non-schema saat `POST /api/data`.
+- Menambahkan tipe `DistributionAssessment` dan field opsional `assessment` pada kontrak frontend.
+- Menambahkan helper frontend `app/src/services/distributionAssessment.ts` sebagai fallback/preview assessment di sisi UI.
+- Mengubah `app/src/services/api.ts` supaya `saveData()` memakai response backend yang sudah dinormalisasi, bukan payload mentah.
+- Mengganti tampilan detail distribusi regulator dan vendor dari gauge statis menjadi output assessment yang explainable sesuai struktur `FLOW.md`.
+- Mengubah halaman hasil input distribusi vendor agar preview menampilkan operational summary, exposure analysis, SOP violation detection, risk factors, dan recommended action.
+- Merapikan label tabel/laporan dari `Risk Score` menjadi `Operational Risk Score`.
+- Mengubah copy publik yang masih memakai istilah terlarang seperti `basi` menjadi istilah operasional yang sesuai `FLOW.md`.
+- Verifikasi perubahan frontend dengan `npm run build` di `app/` dan hasilnya sukses.
+- Verifikasi sintaks backend dengan `python -m py_compile backend/main.py backend/risk_assessment.py` dan hasilnya sukses.
+- Mengganti konfigurasi database backend agar default ke Supabase local (`127.0.0.1:54322`) alih-alih Neon remote.
+- Menambahkan `backend/.env.example` agar lokasi database eksplisit dan mudah di-copy.
+- Melengkapi `backend/requirements.txt` dengan dependency runtime DB yang sebelumnya belum tercantum.
+- Memperbarui `README.md` supaya stack database dan langkah menjalankan Supabase local tidak ambigu.
+- Inisialisasi project Supabase lokal di repo dengan `supabase init`, sehingga `supabase start` bisa dijalankan langsung dari root project ini.
+- Menambahkan `supabase/seed.sql` placeholder agar workflow Supabase local tidak gagal karena file seed default hilang.
+- Verifikasi `backend/.env` sekarang memang mengarah ke `postgresql://postgres:postgres@127.0.0.1:54322/postgres`.
+- Mencoba koneksi database lokal dari backend; hasilnya gagal karena service PostgreSQL Supabase belum aktif.
+- Mencoba `supabase start`; konfigurasi sudah terbaca, tetapi Docker daemon di mesin belum berjalan sehingga stack Supabase local belum bisa dinaikkan.
+- Setelah Docker aktif, memverifikasi `supabase status` dan memastikan stack Supabase local project `garda` benar-benar berjalan di port `54321`/`54322`.
+- Memverifikasi backend berhasil terkoneksi ke PostgreSQL Supabase local dengan query `select 1`.
+- Mengecek isi database lokal dan menemukan tabel aplikasi belum terbentuk (`relation "vendors" does not exist`), sehingga database masih kosong.
+- Menjalankan `backend/seed.py` terhadap Supabase local untuk membuat tabel dan mengisi data awal aplikasi.
+- Memverifikasi hasil seed di database lokal: `vendors=15`, `schools=12`, `distributions=24`, `alerts=8`, `documents=9`, `users=2`.
+- Mengecek error runtime user: `uvicorn` gagal karena port backend sudah terpakai, dan `npm run dev` gagal karena dijalankan dari folder `backend` alih-alih `app`.
+- Menambahkan bootstrap backend saat startup: create table + auto-seed jika database masih kosong, agar repo lebih siap dipakai tanpa seed manual.
+- Menambahkan endpoint `GET /api/health` untuk verifikasi cepat status backend, database, dan jumlah data seed.
+- Memperbaiki UX login agar memakai kredensial seeded yang benar, bukan hint lama yang bertentangan dengan backend.
+- Membuat proxy frontend bisa diarahkan ke port backend yang berbeda melalui `app/.env` (`VITE_API_TARGET`) tanpa edit source code.
+- Membersihkan framing produk yang masih bernuansa prototype/demo pada FAQ, README, dan penamaan seed state backend.
+- Menambahkan session token bertanda tangan HMAC di backend (`backend/token_utils.py`) agar data dashboard tidak lagi terbuka penuh tanpa autentikasi.
+- Memisahkan feed backend menjadi `GET /api/public-data` untuk halaman publik dan `GET/POST /api/data` untuk data private yang sekarang wajib bearer token.
+- Menambahkan endpoint `GET /api/auth/session` dan mengubah `POST /api/auth/login` agar mengembalikan token + profil user untuk restore session yang benar setelah refresh.
+- Menambahkan `app/src/services/http.ts` sebagai satu titik untuk axios instance, penyimpanan token, dan injeksi header `Authorization`.
+- Mengubah `app/src/stores/auth.ts`, `app/src/router/index.ts`, dan `app/src/App.vue` agar session tersimpan, divalidasi ulang saat navigasi private, dan fallback ke public state bila token tidak valid.
+- Mengubah `app/src/services/api.ts` agar memuat data publik untuk pengunjung anonim, data private untuk user login, serta mengosongkan koleksi private saat logout/unauthorized.
+- Membatasi data private backend berdasarkan role: regulator tetap melihat semua data, sementara vendor hanya menerima `vendors/schools/distributions/documents/alerts` miliknya sendiri dan tidak lagi bisa menulis data vendor lain lewat payload global.
+- Memperbaiki bug reaktivitas di halaman yang sebelumnya mengambil snapshot array awal (`VendorScorePage`, `ListVendorPage`, `AlertsPage`, `HistoryPage`, `DashboardPage`, `DokumenIzinPage`) sehingga tabel/list terisi benar pada first load tanpa perlu reload manual.
+- Menghapus asumsi rapuh `user.id == vendor.id` dengan menambahkan relasi eksplisit `users.vendorId`, lalu mengganti scope backend dan flow input distribusi vendor agar memakai `vendorId` ini.
+- Menambahkan patch schema runtime untuk database lokal existing (`ALTER TABLE users ADD COLUMN IF NOT EXISTS "vendorId"`) sekaligus backfill akun vendor seed, sehingga perubahan relasi tidak mewajibkan reset database Supabase local.
+- Mengubah patch schema ad hoc menjadi runner migrasi versioned ringan di `backend/migrations.py`, lengkap dengan tabel `schema_migrations` agar perubahan schema berikutnya punya jalur upgrade yang konsisten.
+- Merapikan bootstrap backend dan seed agar migrasi dijalankan secara eksplisit, bukan lagi lewat side-effect import module.
+- Memperbarui README agar jalur operasi backend lokal sekarang mencakup migrasi manual `python migrations.py` selain bootstrap otomatis saat startup.
+- Mengoptimalkan halaman `GenerateLaporanPage` dengan dynamic import untuk `xlsx`, `jspdf`, dan `jspdf-autotable`, sehingga dependency ekspor berat tidak lagi membebani bundle awal dashboard regulator.
+- Menambahkan `backend/settings.py` agar konfigurasi runtime backend (environment, DB URL, CORS, token TTL, token secret) terkonsolidasi dan bisa divalidasi lebih awal saat startup.
+- Mengganti CORS backend dari `*` menjadi daftar origin eksplisit berbasis env (`CORS_ALLOW_ORIGINS`), serta menolak secret token default jika dijalankan di environment non-local/non-dev.
+- Menambahkan regression check backend di `backend/tests/test_runtime_contracts.py` untuk memverifikasi migrasi, login/session, scope data vendor, dan penolakan penulisan distribusi vendor ke `vendorId` asing.
+- Memperbarui README dengan langkah menjalankan regression check backend lokal menggunakan `python -m unittest tests.test_runtime_contracts`.
+- Mendiagnosis error `404 /api/*` dari frontend dan menemukan akar masalahnya: port `127.0.0.1:8000` di mesin lokal ini dijawab oleh `nginx/PHP`, sedangkan FastAPI repo berjalan di `127.0.0.1:8001`.
+- Menambahkan `app/.env` lokal dan memperluas `app/src/services/http.ts` agar frontend memakai `VITE_API_BASE_URL=http://127.0.0.1:8001`, sehingga request browser tidak lagi diarahkan ke service salah di port `8000`.
+- Menambahkan governance layer pada model user: role `super-admin`, field `isActive`, `createdAt`, dan `lastLoginAt`, lalu memasukkannya ke migrasi versioned dan seed data.
+- Memperbaiki arsitektur pembacaan vendor dengan menjadikan relasi `schools.vendorId -> vendors.id` sebagai source of truth saat serialisasi, sehingga field legacy `vendors.schools` tidak lagi jadi acuan utama.
+- Menambahkan endpoint `GET /api/admin/overview` khusus `super-admin` untuk snapshot platform, kualitas data, akses user, vendor prioritas intervensi, dan dokumen mendekati risiko.
+- Menambahkan route dan dashboard `super admin` di frontend lengkap dengan service `admin.ts`, menu sidebar, redirect login, dan kredensial seed baru `superadmin@garda.id`.
+- Memperluas regression test backend untuk mencakup login `super-admin`, akses overview admin, dan pembatasan bahwa regulator tidak bisa membuka endpoint admin tersebut.
+- Menambahkan normalisasi `alerts.vendorId` dan migrasi foreign key vendor lintas tabel (`schools`, `distributions`, `documents`, `users`, `alerts`) agar relasi domain tidak lagi hanya implisit di level aplikasi.
+- Menambahkan endpoint `PATCH /api/admin/users/{user_id}` untuk CRUD akses user oleh `super-admin`, dengan guard agar admin tidak bisa menonaktifkan atau menurunkan role akun sendiri.
+- Menambahkan editor akses di dashboard `super admin` untuk mengganti role, menghubungkan akun vendor ke vendor tertentu, dan aktivasi/nonaktivasi akun langsung dari UI.
+- Memverifikasi ulang seluruh perubahan lewat build frontend, compile backend, dan regression suite backend (`10 tests OK`) pada Supabase local.

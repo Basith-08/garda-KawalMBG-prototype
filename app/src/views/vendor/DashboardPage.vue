@@ -2,7 +2,6 @@
 import { getData } from '@/services/api'
 
 const data = getData()
-const distributions = data.distributions
 
 function statusColor(s: string) {
   if (s === 'safe') return 'bg-status-safe'
@@ -72,12 +71,12 @@ function statusColor(s: string) {
             <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Porsi</th>
             <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Status</th>
             <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Time</th>
-            <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Risk Score</th>
+            <th class="text-left px-6 py-4 text-sm font-semibold text-navy-700">Operational Risk Score</th>
             <th class="px-6 py-4"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="d in distributions" :key="d.id" class="odd:bg-navy-50 hover:bg-navy-100 transition-colors">
+          <tr v-for="d in data.distributions" :key="d.id" class="odd:bg-navy-50 hover:bg-navy-100 transition-colors">
             <td class="px-6 py-4 text-sm text-navy-700">{{ d.schoolName }}</td>
             <td class="px-6 py-4 text-sm text-navy-700">{{ d.porsi }}</td>
             <td class="px-6 py-4">

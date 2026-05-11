@@ -38,6 +38,17 @@ export interface Distribution {
   durasi: number
   levelRisiko: string
   catatan: string
+  assessment?: DistributionAssessment
+}
+
+export interface DistributionAssessment {
+  operationalSummary: string
+  exposureAnalysis: string[]
+  sopViolations: string[]
+  riskFactors: string[]
+  finalRiskScore: number
+  riskStatus: 'LOW' | 'MEDIUM' | 'HIGH'
+  recommendedAction: string
 }
 
 export interface Alert {
@@ -170,4 +181,3 @@ export function getData() {
 export function saveData(data: ReturnType<typeof getDefaultData>) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
 }
-

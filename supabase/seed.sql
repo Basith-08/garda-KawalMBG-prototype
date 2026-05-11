@@ -1,0 +1,2 @@
+-- Supabase local seed placeholder.
+-- Data aplikasi tetap diinisialisasi lewat `python seed.py` pada backend.

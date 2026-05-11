@@ -11,10 +11,10 @@
           <span>KawalMBG</span>
         </div>
         <h1 class="text-5xl font-bold text-navy-900 leading-tight mb-6">
-          Tekan Risiko Distribusi<br/>Makanan Sekolah
+          Pantau Risiko Operasional<br/>Distribusi Makanan Sekolah
         </h1>
         <p class="text-navy-500 text-lg mb-8 max-w-md">
-          Sistem monitoring distribusi Makanan Bergizi Gratis (MBG) berbasis AI untuk transparansi dan keamanan pangan nasional.
+          Platform operational food safety monitoring untuk distribusi Makanan Bergizi Gratis (MBG) berbasis exposure analysis dan SOP intelligence.
         </p>
         <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
           <router-link to="/login" class="px-8 py-3.5 bg-brand-accent hover:bg-brand-accent-hover text-white rounded-xl font-semibold transition-colors flex items-center gap-2 w-full sm:w-auto justify-center">
@@ -40,21 +40,21 @@
       <div class="max-w-7xl mx-auto px-4 md:px-6">
         <div class="text-center max-w-2xl mx-auto mb-12 md:mb-16">
           <h2 class="text-3xl font-bold text-navy-900 mb-4">Mengapa KawalMBG?</h2>
-          <p class="text-navy-600">Teknologi berbasis data untuk mencegah keracunan dan kecurangan secara real-time.</p>
+          <p class="text-navy-600">Teknologi berbasis data untuk menekan unsafe consumption probability dan kecurangan secara real-time.</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
         <div class="border border-navy-200 rounded-xl p-8 hover:shadow-lg transition-shadow">
-          <h3 class="text-2xl font-bold text-navy-900 mb-4">Risk Scoring AI</h3>
-          <p class="text-navy-500 leading-relaxed">Sistem menganalisis suhu cuaca real-time dari BMKG dan waktu masak vendor untuk memprediksi risiko makanan basi sebelum sampai ke sekolah.</p>
+          <h3 class="text-2xl font-bold text-navy-900 mb-4">Operational Risk Scoring</h3>
+          <p class="text-navy-500 leading-relaxed">Sistem menganalisis suhu cuaca real-time, durasi distribusi, dan exposure chain untuk menghitung unsafe consumption probability sebelum makanan diterima sekolah.</p>
         </div>
         <div class="border border-navy-200 rounded-xl p-8 hover:shadow-lg transition-shadow">
           <h3 class="text-2xl font-bold text-navy-900 mb-4">Guru Verification</h3>
-          <p class="text-navy-500 leading-relaxed">Hanya saat risiko tinggi terdeteksi, AI kami mengirimkan verifikasi singkat via Telegram ke guru di sekolah untuk memastikan kualitas porsi riil.</p>
+          <p class="text-navy-500 leading-relaxed">Saat exposure meningkat, sistem mengirim verifikasi singkat via Telegram ke guru untuk memvalidasi kondisi penerimaan dan kepatuhan operasional di lapangan.</p>
         </div>
         <div class="border border-navy-200 rounded-xl p-8 hover:shadow-lg transition-shadow">
-          <h3 class="text-2xl font-bold text-navy-900 mb-4">Fraud Detection</h3>
-          <p class="text-navy-500 leading-relaxed">Hasil verifikasi dan audit AI dikonversi menjadi skor kepercayaan yang dapat diakses siapa saja sebagai bentuk pertanggungjawaban publik.</p>
+          <h3 class="text-2xl font-bold text-navy-900 mb-4">SOP & Anomaly Detection</h3>
+          <p class="text-navy-500 leading-relaxed">Hasil verifikasi dan audit lapangan diterjemahkan menjadi temuan SOP violation dan anomaly signal yang dapat ditelusuri publik.</p>
         </div>
       </div>
       </div>
