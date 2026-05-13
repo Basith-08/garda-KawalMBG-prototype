@@ -21,12 +21,17 @@ class Settings:
         self.auth_token_secret = os.getenv("AUTH_TOKEN_SECRET", DEFAULT_TOKEN_SECRET)
         self.auth_token_ttl_seconds = int(os.getenv("AUTH_TOKEN_TTL_SECONDS", "43200"))
         self.cors_allow_origins = self._parse_cors_origins(os.getenv("CORS_ALLOW_ORIGINS", ""))
+        self.auto_seed_on_startup = self._parse_bool(os.getenv("AUTO_SEED_ON_STARTUP", "false"))
 
     @staticmethod
     def _parse_cors_origins(raw: str) -> List[str]:
         if not raw.strip():
             return list(DEFAULT_LOCAL_CORS_ORIGINS)
         return [item.strip() for item in raw.split(",") if item.strip()]
+
+    @staticmethod
+    def _parse_bool(raw: str) -> bool:
+        return raw.strip().lower() in {"1", "true", "yes", "on"}
 
     @property
     def requires_strict_secrets(self) -> bool:
@@ -42,3 +47,5 @@ def validate_runtime_settings() -> None:
     settings = get_settings()
     if settings.requires_strict_secrets and settings.auth_token_secret == DEFAULT_TOKEN_SECRET:
         raise RuntimeError("AUTH_TOKEN_SECRET must be overridden outside local/dev environments")
+    if settings.requires_strict_secrets and settings.auto_seed_on_startup:
+        raise RuntimeError("AUTO_SEED_ON_STARTUP must be disabled outside local/dev environments")

@@ -45,6 +45,20 @@ class Distribution(Base):
     durasi = Column(Integer)
     levelRisiko = Column(String)
     catatan = Column(String)
+    cookedAt = Column(String, nullable=True)
+    packagedAt = Column(String, nullable=True)
+    pickupAt = Column(String, nullable=True)
+    deliveredAt = Column(String, nullable=True)
+    arrivalStatus = Column(String, nullable=True)
+    receiptIssueType = Column(String, nullable=True)
+    receiptEvidenceUploaded = Column(Boolean, nullable=False, default=False)
+    receiptNote = Column(String, nullable=True)
+    receiptVerifiedAt = Column(DateTime(timezone=True), nullable=True)
+    qcPhotoUploaded = Column(Boolean, nullable=False, default=False)
+    productionPhotoUploaded = Column(Boolean, nullable=False, default=False)
+    packagingPhotoUploaded = Column(Boolean, nullable=False, default=False)
+    vehiclePhotoUploaded = Column(Boolean, nullable=False, default=False)
+    evidenceUploaded = Column(Boolean, nullable=False, default=False)
 
 class Alert(Base):
     __tablename__ = "alerts"
@@ -56,6 +70,32 @@ class Alert(Base):
     description = Column(String)
     time = Column(String)
     statusTag = Column(String)
+
+
+class RiskScoreHistory(Base):
+    __tablename__ = "risk_scores"
+
+    id = Column(String, primary_key=True, index=True)
+    distributionId = Column(String, ForeignKey("distributions.id"), index=True, nullable=False)
+    vendorId = Column(String, ForeignKey("vendors.id"), index=True, nullable=False)
+    finalRiskScore = Column(Float, nullable=False)
+    riskStatus = Column(String, nullable=False)
+    componentScores = Column(JSON, nullable=True)
+    summary = Column(String, nullable=True)
+    assessedAt = Column(DateTime(timezone=True), nullable=False)
+
+
+class AuditLog(Base):
+    __tablename__ = "audit_logs"
+
+    id = Column(String, primary_key=True, index=True)
+    actorUserId = Column(String, ForeignKey("users.id"), index=True, nullable=True)
+    action = Column(String, nullable=False)
+    entityType = Column(String, nullable=False)
+    entityId = Column(String, nullable=False, index=True)
+    details = Column(JSON, nullable=True)
+    createdAt = Column(DateTime(timezone=True), nullable=False)
+
 
 class Document(Base):
     __tablename__ = "documents"

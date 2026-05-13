@@ -3,14 +3,10 @@ from datetime import datetime, timezone
 
 from sqlalchemy.orm import Session
 
-from database import SessionLocal, engine
+from database import SessionLocal
 from migrations import run_migrations
 import models
 from auth_utils import get_password_hash
-
-# Membuat tabel otomatis di database lokal jika belum ada
-models.Base.metadata.create_all(bind=engine)
-
 
 def ensure_runtime_schema() -> None:
     run_migrations()
